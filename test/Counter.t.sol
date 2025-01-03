@@ -16,8 +16,8 @@ contract CounterTest is Test {
 	vm.prank(script_address);
 	*/
         counter = script.run();
-	console.log(address(script));
-	console.log(address(counter));
+	//console.log(address(script));
+	//console.log(address(counter));
         //counter.setNumber(0);
     }
 
@@ -29,7 +29,10 @@ contract CounterTest is Test {
     function test_OwnerIsScript() public {
 	//address script_address = address(script);
 	//vm.prank(script_address);
-	assertEq(counter.owner(), msg.sender);
+	console.log("msg.sender: ", msg.sender);
+	console.log("tx.origin: ", tx.origin);
+	console.log("address(this): ", address(this));
+	assertEq(counter.owner(), tx.origin);
     }
 
     function testFuzz_SetNumber(uint256 x) public {

@@ -6,7 +6,7 @@ contract Counter {
     address public immutable owner;
 
     constructor(){ 
-	owner = msg.sender;
+	owner = tx.origin;
     }
 
     modifier onlyOwner() {
