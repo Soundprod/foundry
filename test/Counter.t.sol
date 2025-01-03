@@ -3,13 +3,22 @@ pragma solidity ^0.8.13;
 
 import {Test, console} from "forge-std/Test.sol";
 import {Counter} from "../src/Counter.sol";
+import {CounterScript} from "../script/Counter.s.sol";
 
 contract CounterTest is Test {
     Counter public counter;
+    CounterScript public script;
 
     function setUp() public {
-        counter = new Counter();
-        counter.setNumber(0);
+	script = new CounterScript();
+	/*
+	address script_address = address(script);
+	vm.prank(script_address);
+	*/
+        counter = script.run();
+	console.log(address(script));
+	console.log(address(counter));
+        //counter.setNumber(0);
     }
 
     function test_Increment() public {
@@ -17,8 +26,15 @@ contract CounterTest is Test {
         assertEq(counter.number(), 1);
     }
 
+    function test_OwnerIsScript() public {
+	//address script_address = address(script);
+	//vm.prank(script_address);
+	assertEq(counter.owner(), msg.sender);
+    }
+
     function testFuzz_SetNumber(uint256 x) public {
+	vm.expectRevert();
         counter.setNumber(x);
-        assertEq(counter.number(), x);
+        //assertEq(counter.number(), x);
     }
 }
